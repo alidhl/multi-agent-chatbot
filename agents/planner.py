@@ -69,4 +69,6 @@ if __name__ == "__main__":
     print(query + "\n\n")
     print(planner.invoke({"objective" : query}))
     print("-"*50)
+    print(planner.invoke({"objective" : query}).steps)
+    
     
