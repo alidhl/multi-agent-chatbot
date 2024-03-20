@@ -16,11 +16,12 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
+print(openai_api_key)
 if prompt := st.chat_input():
     if not openai_api_key:
         st.info("Please add your OpenAI API to continue.")
         st.stop()
-   
+    print(openai_api_key)
     os.environ['OPENAI_API_KEY'] = openai_api_key
     # Will be used in the future for now will use my own API key
     #os.environ['TAVELIY_API_KEY'] = taveliy_api_key
