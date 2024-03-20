@@ -11,7 +11,7 @@ from langsmith import Client
 
 unique_id = uuid4().hex[0:8]
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "arabic-search"
+os.environ["LANGCHAIN_PROJECT"] = "multi-agent-search"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
 client = Client()
 # Define the State
