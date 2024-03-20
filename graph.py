@@ -1,11 +1,19 @@
-from langchain_core.pydantic_v1 import BaseModel, Field
 from typing import List, Tuple, Annotated, TypedDict
 import operator
 from agents.planner import get_planner, get_replanner
 from agents.executor import get_executor
 from agents.planner import Response
 from langgraph.graph import StateGraph, END
-import asyncio
+
+import os
+from uuid import uuid4
+from langsmith import Client
+
+unique_id = uuid4().hex[0:8]
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "arabic-search"
+os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
+client = Client()
 # Define the State
 class State(TypedDict):
     input: str
@@ -20,18 +28,18 @@ replanner = get_replanner()
 
 # Create the graph
 
-async def execute(state: State):
+def execute(state: State):
     task = state['plan'][0]
-    output = await executor.ainvoke({'input': task, "chat_history" : []})
+    output = executor.invoke({'input': task, "chat_history" : []})
     return {"past_steps" : (task, output['agent_outcome'].return_values['output'])}
 
-async def plan(state: State):
-    plan = await planner.ainvoke({'objective': state['input']})
+def plan(state: State):
+    plan = planner.invoke({'objective': state['input']})
     return {"plan" : plan.steps}
 
-async def replan(state: State):
-    output = await replanner.ainvoke(state)
-    # If the output is a reponse (the plan is complete), then return the response else update the plan
+def replan(state: State):
+    output = replanner.invoke(state)
+    # If the output is a response (the plan is complete), then return the response else update the plan
     if isinstance(output, Response):
         return {"response" : output.response}
     else:
@@ -63,13 +71,14 @@ def get_graph():
     return graph.compile()
 
 # Test the graph
-async def main():
+def main():
     g = get_graph()
     query = "When was Saudi Arabia The Line project announced?"
-    async for event in g.astream({'input' : query}):
+    for event in g.stream({'input' : query}):
         for k, v in event.items():
             if k != "__end__":
                 print(v)
+                
 
 if __name__ == "__main__":    
-    asyncio.run(main())
+    main()

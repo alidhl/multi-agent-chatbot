@@ -17,6 +17,6 @@ def get_executor():
 # Test the agent executor
 if __name__ == "__main__":
     executor = get_executor()
-    query = "What is the capital of Saudi Arabia?"
+    query = "When was Saudi Arabia The Line project announced?"
     print(query + "\n\n")
     print(executor.invoke({"input" : query , "chat_history" : []}))

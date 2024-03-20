@@ -12,7 +12,7 @@ class Planner(BaseModel):
 
 
 planner_prompt = ChatPromptTemplate.from_template(
-    """For the given objective, come up with a simple step by step plan. \
+    """For the given objective, come up with a simple and concise step by step plan. \
 This plan should involve individual tasks, that if executed correctly will yield the correct answer. Do not add any superfluous steps. \
 The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
 
@@ -29,27 +29,25 @@ def get_planner():
 # Replanner for updating the plan or returning a response
 
 class Response(BaseModel):
-    """Response to the query"""
+    """Response to user"""
     
     response: str
     
     
 # Inside the state will be four fields: input , plan , past_steps , response     
 replanner_prompt = ChatPromptTemplate.from_template(
-    """For the given objective, come up with a simple step by step plan. \
-This plan should involve individual tasks, that if executed correctly will yield the correct answer. Do not add any superfluous steps. \
-The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
+"""You are a replanner agent. Your role is to update the execution plan of another agent to achieve a given objective, step by step. If the answer to the objective is already found in the past steps, your task is to return that answer.\
 
-Your objective was this:
+Here is your objective:
 {input}
 
-Your original plan was this:
+Here is your current plan:
 {plan}
 
-You have currently done the follow steps:
+These are the steps that have been executed so far:
 {past_steps}
 
-Update your plan accordingly. If no more steps are needed and you can return to the user, then respond with that. Otherwise, fill out the plan. Only add steps to the plan that still NEED to be done. Do not return previously done steps as part of the plan."""
+Based on the execution of the plan so far, your task is to update the plan by removing the completed steps. Ensure that the remaining steps in the plan will lead to the answer for the objective. Remember, if the answer is already in the past steps, simply return that answer."""
 )
 
 def get_replanner():
