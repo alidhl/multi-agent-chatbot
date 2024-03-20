@@ -4,7 +4,7 @@ import os
 
 with st.sidebar:
     st.sidebar.title("API Keys")
-    openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+    openai_api_key = st.sidebar.text_input("OpenAI API Key", key= "chatbot_api_key" , type="password")
     #taveliy_api_key = st.sidebar.text_input("Taveliy API Key", type="password")
 
 
