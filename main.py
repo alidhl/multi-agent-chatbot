@@ -5,7 +5,7 @@ import os
 with st.sidebar:
     st.sidebar.title("API Keys")
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-    taveliy_api_key = st.sidebar.text_input("Taveliy API Key", type="password")
+    #taveliy_api_key = st.sidebar.text_input("Taveliy API Key", type="password")
 
 
 
@@ -17,11 +17,12 @@ for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input():
-    if not openai_api_key or not taveliy_api_key:
-        st.info("Please add your OpenAI API and Taveliy key to continue.")
+    if not openai_api_key:
+        st.info("Please add your OpenAI API to continue.")
         st.stop()
     os.environ['OPENAI_API_KEY'] = openai_api_key
-    os.environ['TAVELIY_API_KEY'] = taveliy_api_key
+    # Will be used in the future for now will use my own API key
+    #os.environ['TAVELIY_API_KEY'] = taveliy_api_key
     graph = get_graph()
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
