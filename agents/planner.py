@@ -48,7 +48,7 @@ def get_replanner():
     These are the steps that have been executed so far:
     {past_steps}
 
-    Based on the execution of the plan so far, your task is to update the plan by removing the completed steps. Ensure that the remaining steps in the plan will lead to the answer for the objective. Remember, if the answer is already in the past steps, simply return that answer."""
+    Based on the execution of the plan so far, your task is to update the plan by removing the completed steps. Ensure that the remaining steps in the plan will lead to the answer for the objective. Remember, make sure to answer the objective fully not just part of it."""
     )
     return create_openai_fn_runnable(
         functions= [Planner, Response],
