@@ -20,19 +20,17 @@ if prompt := st.chat_input():
     if not openai_api_key:
         st.info("Please add your OpenAI API to continue.")
         st.stop()
-    else:
-        start_chat = st.button('Start Chat')
-        if start_chat:
-            os.environ['OPENAI_API_KEY'] = openai_api_key
-            # Will be used in the future for now will use my own API key
-            #os.environ['TAVELIY_API_KEY'] = taveliy_api_key
-            graph = get_graph()
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            st.chat_message("user").write(prompt)
-            response = graph.invoke({"input": st.session_state.messages[-1]})
-            msg = response["response"]
-            st.session_state.messages.append({"role": "assistant", "content": msg})
-            st.chat_message("assistant").write(msg)
+   
+    os.environ['OPENAI_API_KEY'] = openai_api_key
+    # Will be used in the future for now will use my own API key
+    #os.environ['TAVELIY_API_KEY'] = taveliy_api_key
+    graph = get_graph()
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
+    response = graph.invoke({"input": st.session_state.messages[-1]})
+    msg = response["response"]
+    st.session_state.messages.append({"role": "assistant", "content": msg})
+    st.chat_message("assistant").write(msg)
 
 
 
